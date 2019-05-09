@@ -81,15 +81,16 @@ int main(int argc, char *argv[]){
     FILE *fp;
     FILE *rp;
     char *token;
+    char *dilem = " ";
     char str[MAX];
     fp = fopen(argv[1],"r");
     while(fgets(str,MAX,fp) != NULL){
         a=(int *)malloc(sizeof(int)*100000);
-        token = strtok(str, ' ');
+        token = strtok(str, dilem);
         while( token != NULL ){
             //printf( "%s\n", token );   
             a[count++] = atoi(token);
-            token = strtok(NULL, ' ');
+            token = strtok(NULL, dilem);
         }
         m.i = 0;
         m.j = count - 1;
@@ -102,12 +103,12 @@ int main(int argc, char *argv[]){
             printf ("%d ", a[i]);
         }
         printf ("\n");
-
+        fprintf(rp,"\n");
         free(a);
         count = 0;
+        fclose(rp);
     }
     fclose(fp);
-    fclose(rp);
     // pthread_exit(NULL);
     return 0;
 }
