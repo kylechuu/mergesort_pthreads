@@ -76,8 +76,10 @@ void * mergesort(void *a){
 
 int main(int argc, char *argv[]){
     int i = 0;
+    int count = 0;
     NODE m;
     FILE *fp;
+    FILE *rp;
     char *token;
     char str[MAX];
     fp = fopen(argv[1],"r");
@@ -86,20 +88,26 @@ int main(int argc, char *argv[]){
         token = strtok(str, ' ');
         while( token != NULL ){
             //printf( "%s\n", token );   
-            a[i++] = atoi(token);
+            a[count++] = atoi(token);
             token = strtok(NULL, ' ');
         }
         m.i = 0;
-        m.j = i - 1;
+        m.j = count - 1;
         pthread_t tid;
         pthread_create(&tid, NULL, mergesort, &m);
         pthread_join(tid, NULL);
-        for (i = 0; i < 10; i++)
+        rp = fopen(argv[2],"a");
+        for (i = 0; i < count; i++){
+            fprintf(rp, "%d ", a[i]);
             printf ("%d ", a[i]);
+        }
         printf ("\n");
+
         free(a);
-        i = 0;
+        count = 0;
     }
+    fclose(fp);
+    fclose(rp);
     // pthread_exit(NULL);
     return 0;
 }
