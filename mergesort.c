@@ -3,19 +3,9 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>
-#define NOTHREADS 2
+#include <time.h>
+//#define NOTHREADS 2
 #define MAX 130000
-/*
-gcc -ggdb -lpthread parallel-mergesort.c 
-NOTE: 
-The mergesort boils downs to this.. 
-Given two sorted array's how do we merge this?
-We need a new array to hold the result of merging
-otherwise it is not possible to do it using array, 
-so we may need a linked list
-*/
-
-//int a[] = {10, 8, 5, 2, 3, 6, 7, 1, 4, 9};
 int *a;
 
 typedef struct node{
@@ -76,13 +66,16 @@ void * mergesort(void *a){
 
 
 int main(int argc, char *argv[]){
+    clock_t start_time, end_time;
+    float total_time = 0;
+    start_time = clock();
     int i = 0;
     int count = 0;
     NODE m;
     FILE *fp;
     FILE *rp;
     char *token;
-    char *dilem = " ";
+    char *dilem = " "; 
     char str[MAX];
     fp = fopen(argv[1],"r");
     while(fgets(str,MAX,fp) != NULL){
@@ -99,17 +92,22 @@ int main(int argc, char *argv[]){
         pthread_create(&tid, NULL, mergesort, &m);
         pthread_join(tid, NULL);
         rp = fopen(argv[2],"a");
-        for (i = 0; i < count; i++){
-            fprintf(rp, "%d ", a[i]);
+        for (i = 0; i < count; i++){ 
+            if(i == count - 1)
+                fprintf(rp, "%d", a[i]);
+            else
+                fprintf(rp, "%d ", a[i]);
             printf ("%d ", a[i]);
         }
         printf ("\n");
-        fprintf(rp,"\n");
+        fprintf(rp, "\n");
         free(a);
         count = 0;
         fclose(rp);
     }
     fclose(fp);
-    // pthread_exit(NULL);
+    end_time = clock();
+    total_time = (float)(end_time - start_time) / CLOCKS_PER_SEC;
+    printf("Time: %f sec \n", total_time);
     return 0;
 }
