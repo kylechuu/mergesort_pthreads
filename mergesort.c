@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <stdlib.h>
-#include<limits.h>
+#include <limits.h>
+#include <string.h>
 #define NOTHREADS 2
 #define MAX 130000
 /*
